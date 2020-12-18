@@ -85,7 +85,7 @@
         
         if (isAuth==="true") {
           self.username = usuario;
-          axios.get("http://127.0.0.1:8000/users/"+ usuario)
+          axios.get("https://cinsell--api.herokuapp.com/users/"+ usuario)
             .then((result) => {
               self.nombre = result.data.nombre;
               self.nDocumento = result.data.nDocumento;
