@@ -177,5 +177,6 @@ export default {
 }
 #submit:hover {
   background-color: #1631aa;
+  border: 4px #3259fe solid;
 }
 </style>
