@@ -36,7 +36,7 @@
 import axios from "axios";
 
 export default {
-  name: "App",
+  name: "login",
   data() {
     return {
       form: { username: "", password: "" }

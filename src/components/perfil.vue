@@ -2,7 +2,7 @@
   <div id="perfil">
     <header>
       <h1>Cinsell</h1>
-      <button>Cerrar Sesión</button>
+      <button v-on:click="logOut">Cerrar Sesión</button>
     </header>
 
     <div id="perfil-content">
@@ -15,31 +15,31 @@
         <h2>Datos de perfil</h2>
         <div>
           <label for="">Nickname:</label>
-          <input type="text" value="Prueba" readonly/>
+          <input type="text" :value="username" readonly/>
         </div>
         <div>
           <label for="">Nombres y apellidos:</label>
-          <input type="text" readonly/>
+          <input type="text" :value="nombre" readonly/>
         </div>
         <div>
           <label for=""># Identificación:</label>
-          <input type="number" readonly/>
+          <input type="number" :value="nDocumento" readonly/>
         </div>
         <div>
           <label for="">Teléfono:</label>
-          <input type="number" readonly/>
+          <input type="number" :value="telefono" readonly/>
         </div>
         <div>
           <label for="">Dirección:</label>
-          <input type="text" readonly/>
-        </div>
-        <div>
-          <label for="">Departamento:</label>
-          <input type="text" readonly/>
+          <input type="text" :value="direccion" readonly/>
         </div>
         <div>
           <label for="">Ciudad:</label>
-          <input type="text" readonly/>
+          <input type="text" :value="ciudad" readonly/>
+        </div>
+        <div>
+          <label for="">Departamento:</label>
+          <input type="text" :value="departamento" readonly/>
         </div>
       </div>
     </div>
@@ -53,7 +53,55 @@
 
 <script>
 
-  
+  import axios from "axios";
+
+  export default {
+    name: "perfil",
+    data() {
+      return {
+        username: "none",
+        nombre: "none",
+        nDocumento: 0,
+        telefono: 0,
+        direccion: "none",
+        ciudad: "none",
+        departamento: "none"
+      };
+    }, 
+    methods: {
+      logOut() {
+        localStorage.removeItem("username");
+        localStorage.removeItem("isAuth");
+        this.$router.push("/login");
+      }
+    },
+    created: function(){
+        let usuario = localStorage.getItem("username");
+        let isAuth = localStorage.getItem("Auth");
+        let self = this;
+
+        console.log(typeof(isAuth))
+        console.log(self.data)
+        
+        if (isAuth==="true") {
+          self.username = usuario;
+          axios.get("http://127.0.0.1:8000/users/"+ usuario)
+            .then((result) => {
+              self.nombre = result.data.nombre;
+              self.nDocumento = result.data.nDocumento;
+              self.telefono = result.data.telefono;
+              self.direccion = result.data.direccion;
+              self.ciudad = result.data.ciudad;
+              self.departamento = result.data.departamento;
+            })
+            .catch(error => console.log(error))
+        } else {
+          this.$router.push("/login");
+        }
+
+    }
+    
+  };
 
 </script>
 
