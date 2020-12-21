@@ -7,7 +7,7 @@
 
     <div id="perfil-content">
       <div id="avatar">
-        <h2>Hola {{ username }}!</h2>
+        <h2>Hola {{ usuario }}!</h2>
         <img src="../assets/profile-icon.svg" alt="foto de perfil" />
       </div>
 
@@ -15,7 +15,7 @@
         <h2>Datos de perfil</h2>
         <div>
           <label for="">Nickname:</label>
-          <input type="text" :value="username" readonly/>
+          <input type="text" :value="usuario" readonly/>
         </div>
         <div>
           <label for="">Nombres y apellidos:</label>
@@ -71,21 +71,20 @@
     methods: {
       logOut() {
         localStorage.removeItem("username");
-        localStorage.removeItem("isAuth");
+        localStorage.removeItem("Auth");
         this.$router.push("/login");
       }
     },
-    created: function(){
+    beforeCreate: function(){
         let usuario = localStorage.getItem("username");
         let isAuth = localStorage.getItem("Auth");
         let self = this;
 
         console.log(typeof(isAuth))
-        console.log(self.data)
         
         if (isAuth==="true") {
-          self.username = usuario;
-          axios.get("https://cinsell--api.herokuapp.com/users/"+ usuario)
+          this.usuario = usuario;
+          axios.get("http://localhost:8000/users/"+ usuario)
             .then((result) => {
               self.nombre = result.data.nombre;
               self.nDocumento = result.data.nDocumento;
@@ -96,7 +95,7 @@
             })
             .catch(error => console.log(error))
         } else {
-          this.$router.push("/login");
+          this.$router.push({name:"login"});
         }
 
     }

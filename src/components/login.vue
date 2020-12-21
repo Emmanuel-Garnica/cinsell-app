@@ -28,6 +28,7 @@
       />
 
       <input id="submit" type="submit" value="Iniciar Sesión" />
+      <button id="to-register" v-on:click="register">Registrarse</button>
     </form>
   </div>
 </template>
@@ -54,13 +55,13 @@ export default {
         alert("Digita tu contraseña");
       } else {
         axios
-          .post("https://cinsell--api.herokuapp.com/login/", this.form)
+          .post("http://localhost:8000/login", this.form)
           .then(result => {
             let auth = result.data.Autenticado;
             if (user == "" || pass == "") {
               alert("Digita todos los campos");
             } else if (auth === true) {
-              this.$router.push("/perfil");
+              this.$router.push({name:"perfil", params:{username:user}});
               localStorage.setItem("username", this.form.username);
               localStorage.setItem("Auth", auth);
             } else {
@@ -75,6 +76,9 @@ export default {
               alert("El usuario y/o contraseña no son válidos");
           });
       }
+    },
+    register: function() {
+      this.$router.push("/registro");
     }
   }
 };
@@ -161,7 +165,7 @@ export default {
   font-size: 1.2rem;
 }
 
-#submit {
+#submit, #to-register {
   background-color: #3259fe;
   margin: auto;
   width: 100%;
@@ -175,8 +179,8 @@ export default {
   font-size: 1.3rem;
   font-weight: 550;
 }
-#submit:hover {
+#submit:hover, #to-register:hover {
   background-color: #1631aa;
-  border: 4px #3259fe solid;
+  cursor: pointer;
 }
 </style>
